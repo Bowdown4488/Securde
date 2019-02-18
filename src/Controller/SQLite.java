@@ -65,12 +65,13 @@ public class SQLite {
         return users;
     }
     
-    public void addUser(String username, String password) {
-        String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + password + "')";
-        
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+    public boolean addUser(String username, String password) {
+        if(this.checkUsernameAvailable(username)){
+            String sql = "INSERT INTO users(username,password) VALUES('" + username + "','" + password + "')";
+            
+            try (Connection conn = DriverManager.getConnection(driverURL);
+                Statement stmt = conn.createStatement()){
+                stmt.execute(sql);
             
 //  For this activity, we would not be using prepared statements first.
 //      String sql = "INSERT INTO users(username,password) VALUES(?,?)";
@@ -78,7 +79,18 @@ public class SQLite {
 //      pstmt.setString(1, username);
 //      pstmt.setString(2, password);
 //      pstmt.executeUpdate();
-        } catch (Exception ex) {}
+            } catch (Exception ex) {}
+            return true;
+        }else
+            return false;
+    }
+    public boolean checkUsernameAvailable(String username){
+        ArrayList<User> users =this.getUsers();
+        for(int i=0;i<users.size();i++){
+            if(users.get(i).getUsername().toLowerCase().equals(username.toLowerCase()))
+                return false;
+        }
+        return true;
     }
     
     public void addUser(String username, String password, int role) {

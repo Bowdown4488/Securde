@@ -1,6 +1,9 @@
 
 package View;
 
+import Model.User;
+import java.util.ArrayList;
+
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
@@ -88,7 +91,25 @@ public class Login extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        frame.mainNav();
+        ArrayList<User> users = frame.getUser();
+        int index = 0;
+        String username,password;
+        while(users.size() > index){
+            if(jTextField1.getText().equals(users.get(index).getUsername())){
+                username = users.get(index).getUsername();
+                System.out.println("Username:" + username);
+                
+                //Insert Hash Here To Compare With Hashed Password in the database
+                
+                if(jTextField2.getText().equals(users.get(index).getPassword())){
+                    password = users.get(index).getPassword();
+                    System.out.println("Password:" + password);
+                    System.out.println("User Logged In");
+                    frame.mainNav();
+                }
+            }
+            index++;
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

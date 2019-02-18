@@ -1,12 +1,12 @@
 package View;
 
 import Controller.Main;
+import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import javax.swing.WindowConstants;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Frame extends javax.swing.JFrame {
 
@@ -248,55 +248,13 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "registerPnl");
     }
     
-    public void registerAction(String username, String password, String confpass){
-        if(password.equals(confpass)){
-            if(password.length()>=8){
-                Pattern letter = Pattern.compile("[a-zA-z]");
-                Pattern digit = Pattern.compile("[0-9]");
-                Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
-
-                Matcher hasLetter = letter.matcher(password);
-                Matcher hasDigit = digit.matcher(password);
-                Matcher hasSpecial = special.matcher(password);
-                
-                boolean isLetter = hasLetter.find();
-                boolean isDigit = hasDigit.find();
-                boolean isSpecial = hasSpecial.find();
-                
-                //If Statements For Logging Purposes
-                if (isLetter && isDigit && isSpecial) {
-                    System.out.println("Password: " + password);
-                    main.sqlite.addUser(username, password);
-                }
-                else if (!isLetter && isDigit && isSpecial){
-                    System.out.println("No Letters Found");
-                }
-                else if (isLetter && !isDigit && isSpecial){
-                    System.out.println("No Digit Found");
-                }
-                else if (isLetter && isDigit && !isSpecial){
-                    System.out.println("No Special Found");
-                }
-                else if (!isLetter && !isDigit && isSpecial){
-                    System.out.println("No Letters and Digit Found");
-                }
-                else if (!isLetter && isDigit && !isSpecial){
-                    System.out.println("No Letters and Special Found");
-                }
-                else if (isLetter && !isDigit && !isSpecial){
-                    System.out.println("No Digit and Special Found");
-                }
-                else {
-                    System.out.println("Password not created");
-                } 
-            }
-            else{
-                System.out.println("Password Less Than 8 Characters");
-            }
-        }
-        else{
-            System.out.println("Password and Confirm Password Don't Match");
-        }
+    public boolean registerAction(String username, String password, String confpass){
+        //Database Hash here
+        return main.sqlite.addUser(username, password);
+    }
+    
+    public ArrayList<User> getUser (){
+        return main.sqlite.getUsers();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

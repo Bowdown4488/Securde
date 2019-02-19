@@ -132,6 +132,7 @@ public class Register extends javax.swing.JPanel {
                 if (isLetter && isDigit && isSpecial) {
                     System.out.println("Password: " + password);
                     if(frame.registerAction(username.getText(), password.getText(), confpass.getText())){
+                        reset();
                         frame.loginNav();
                         message="User: "+ username.getText()+ " created" ;
                     }    
@@ -173,9 +174,15 @@ public class Register extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        reset();
         frame.loginNav();
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    private void reset(){
+            password.setText("");
+            username.setText("");
+            confpass.setText("");
+            jLabel2.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField confpass;

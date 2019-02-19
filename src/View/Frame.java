@@ -7,13 +7,34 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.WindowConstants;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.JOptionPane;
+
 
 public class Frame extends javax.swing.JFrame {
-
+    private int timeLoggedin = 0;
+    private boolean loggedIn = false;
+    private Timer x = new Timer();
     public Frame() {
         initComponents();
+        x.scheduleAtFixedRate(loginTimer, 1000, 1000);
     }
-
+    TimerTask loginTimer = new TimerTask(){
+        public void run(){
+            if(loggedIn)
+                timeLoggedin++;
+                
+            //TIMEOUT Put logs here if needed
+            if(timeLoggedin==60){
+                frameView.show(Container, "loginPnl");
+                timeLoggedin = 0;
+                loggedIn=false;
+                JOptionPane.showMessageDialog(null, "You have been inactive for more than a minute");
+            }
+        }
+        
+    };
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -182,22 +203,28 @@ public class Frame extends javax.swing.JFrame {
 
     private void adminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBtnActionPerformed
         contentView.show(Content, "adminHomePnl");
+        timeLoggedin = 0;
     }//GEN-LAST:event_adminBtnActionPerformed
 
     private void managerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerBtnActionPerformed
         contentView.show(Content, "managerHomePnl");
+        timeLoggedin = 0;
     }//GEN-LAST:event_managerBtnActionPerformed
 
     private void staffBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffBtnActionPerformed
         contentView.show(Content, "staffHomePnl");
+        timeLoggedin = 0;
     }//GEN-LAST:event_staffBtnActionPerformed
 
     private void clientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientBtnActionPerformed
         contentView.show(Content, "clientHomePnl");
+        timeLoggedin = 0;
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         frameView.show(Container, "loginPnl");
+        loggedIn=false;
+        timeLoggedin = 0;
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
@@ -236,8 +263,35 @@ public class Frame extends javax.swing.JFrame {
         this.setVisible(true);
     }
     
-    public void mainNav(){
+    public void mainNav(User user){
         frameView.show(Container, "homePnl");
+        loggedIn=true;
+        adminBtn.setVisible(false);
+        managerBtn.setVisible(false);
+        staffBtn.setVisible(false);
+        clientBtn.setVisible(false);
+        switch (user.getRole()) {
+            case 2:
+                //client
+                clientBtn.setVisible(true);
+                contentView.show(Content, "clientHomePnl");
+                break;
+            case 3:
+                //staff
+                staffBtn.setVisible(true);
+                contentView.show(Content, "staffHomePnl");
+                break;
+            case 4:
+                //manager
+                managerBtn.setVisible(true);
+                contentView.show(Content, "managerHomePnl");
+                break;
+            default:
+                //admin
+                adminBtn.setVisible(true);
+                contentView.show(Content, "adminHomePnl");
+                break;
+        }
     }
     
     public void loginNav(){
@@ -256,6 +310,15 @@ public class Frame extends javax.swing.JFrame {
     public ArrayList<User> getUser (){
         return main.sqlite.getUsers();
     }
+    
+    public void updateUser(String username){
+        main.sqlite.updateUser(username);
+    }
+    
+    public void updateAttemptCounter(String username, int attemptCounter){
+        main.sqlite.updateAttemptCounter(username,attemptCounter);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;

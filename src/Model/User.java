@@ -5,17 +5,19 @@ public class User {
     private String username;
     private String password;
     private int role;
+    private int attemptCounter;
 
     public User(String username, String password){
         this.username = username;
         this.password = password;
     }
     
-    public User(int id, String username, String password, int role){
+    public User(int id, String username, String password, int role, int attemptCounter){
         this.id = id;
         this.username = username;
         this.password = password;
         this.role = role;
+        this.attemptCounter = attemptCounter;
     }
     
     public int getId() {
@@ -49,4 +51,14 @@ public class User {
     public void setRole(int role) {
         this.role = role;
     }
+    
+    public int getAttemptCounter() {
+        return attemptCounter;
+    }
+
+    public void setAttemptCounter(int attemptCounter) {
+        this.attemptCounter = attemptCounter;
+    }
+    
+    
 }

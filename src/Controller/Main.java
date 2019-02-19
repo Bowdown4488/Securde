@@ -29,11 +29,11 @@ public class Main {
         sqlite.createUserTable();
         
         // Add users
-        sqlite.addUser("admin", "qwerty1234" , 5);
-        sqlite.addUser("manager", "qwerty1234", 4);
-        sqlite.addUser("staff", "qwerty1234", 3);
-        sqlite.addUser("client1", "qwerty1234", 2);
-        sqlite.addUser("client2", "qwerty1234", 2);
+        sqlite.addUser("admin", "qwerty1234!" , 5, 0);
+        sqlite.addUser("manager", "qwerty1234!", 4, 0);
+        sqlite.addUser("staff", "qwerty1234!", 3, 0);
+        sqlite.addUser("client1", "qwerty1234!", 2, 0);
+        sqlite.addUser("client2", "qwerty1234!", 2, 0);
         
         // Get users
         ArrayList<User> users = sqlite.getUsers();
@@ -42,7 +42,9 @@ public class Main {
             System.out.println(" Username: " + users.get(nCtr).getUsername());
             System.out.println(" Password: " + users.get(nCtr).getPassword());
             System.out.println(" Role: " + users.get(nCtr).getRole());
+            System.out.println(" Attempts: " + users.get(nCtr).getAttemptCounter());
         }
+        System.out.println("==================\nLogs: ");
         
         // Initialize User Interface
         Frame frame = new Frame();

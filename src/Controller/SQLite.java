@@ -26,7 +26,8 @@ public class SQLite {
             + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
             + " username TEXT NOT NULL,\n"
             + " password TEXT NOT NULL,\n"
-            + " role INTEGER DEFAULT 2\n"
+            + " role INTEGER DEFAULT 2,\n"
+            + " attemptCounter INTEGER DEFAULT 0\n"
             + ");";
 
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -47,7 +48,7 @@ public class SQLite {
     }
     
     public ArrayList<User> getUsers(){
-        String sql = "SELECT id, username, password, role FROM users";
+        String sql = "SELECT id, username, password, role, attemptCounter FROM users";
         ArrayList<User> users = new ArrayList<User>();
         
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -58,7 +59,8 @@ public class SQLite {
                 users.add(new User(rs.getInt("id"),
                                    rs.getString("username"),
                                    rs.getString("password"),
-                                   rs.getInt("role")));
+                                   rs.getInt("role"),
+                                   rs.getInt("attemptCounter") ));
             
             }
         } catch (Exception ex) {}
@@ -93,8 +95,8 @@ public class SQLite {
         return true;
     }
     
-    public void addUser(String username, String password, int role) {
-        String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + password + "','" + role + "')";
+    public void addUser(String username, String password, int role, int attempCounter) {
+        String sql = "INSERT INTO users(username,password,role,attemptCounter) VALUES('" + username + "','" + password + "','" + role + " ','" + attempCounter + " ')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
@@ -109,7 +111,28 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("User " + username + " has been deleted.");
+            System.out.println("User: " + username + " has been deleted.");
+        } catch (Exception ex) {}
+    }
+    
+    public void updateUser (String username){
+         String sql = "UPDATE users SET role = 1 " + "WHERE username = '" +username+"'";
+         
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("User: " + username + " has been locked.");
+        } catch (Exception ex) {}
+    }
+    
+    public void updateAttemptCounter (String username,int attemptCounter){
+         String sql = "UPDATE users SET attemptCounter =" + attemptCounter
+                + " WHERE username = '" +username+"'";
+         
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("User: " + username + " # of attempts ->" + attemptCounter);
         } catch (Exception ex) {}
     }
     

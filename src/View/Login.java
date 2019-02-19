@@ -21,6 +21,7 @@ public class Login extends javax.swing.JPanel {
         jTextField2 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -57,28 +58,35 @@ public class Login extends javax.swing.JPanel {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText(" ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(200, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTextField1)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(200, Short.MAX_VALUE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextField2))
+                .addGap(200, 200, 200))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(88, Short.MAX_VALUE)
+                .addContainerGap(91, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(17, 17, 17)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -86,7 +94,7 @@ public class Login extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(126, Short.MAX_VALUE))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -94,33 +102,66 @@ public class Login extends javax.swing.JPanel {
         ArrayList<User> users = frame.getUser();
         int index = 0;
         String username,password;
+        String message = "";
+        boolean pass=false;
         while(users.size() > index){
-            if(jTextField1.getText().equals(users.get(index).getUsername())){
+            if((jTextField1.getText().equals(users.get(index).getUsername()))&&users.get(index).getRole()!=1){
                 username = users.get(index).getUsername();
-                System.out.println("Username:" + username);
                 
                 //Insert Hash Here To Compare With Hashed Password in the database
                 
                 if(jTextField2.getText().equals(users.get(index).getPassword())){
                     password = users.get(index).getPassword();
-                    System.out.println("Password:" + password);
-                    System.out.println("User Logged In");
-                    frame.mainNav();
+                    System.out.println("User:" + username +" Logged In");
+                    frame.updateAttemptCounter(username,0);
+                    users.get(index).setAttemptCounter(0);
+                    System.out.println("Reset Attempts:" + users.get(index).getAttemptCounter());
+                    reset();
+                    frame.mainNav((users.get(index)));
+                    pass=true;
+                    message="success";
+                    break;
+                }else{
+                    message="wrong password";
+                    frame.updateAttemptCounter(username,users.get(index).getAttemptCounter()+1); //Starts Counter For Locking saves in database
+                    users.get(index).setAttemptCounter(users.get(index).getAttemptCounter()+1); //Starts Counter For Locking arrayList
+                    lockedCheck(users.get(index).getAttemptCounter(),username);
+                    break;
                 }
             }
+            if((jTextField1.getText().equals(users.get(index).getUsername()))){
+                message="disabled account";
+                break;
+            }
             index++;
+            message="wrong username";
         }
+        if(!pass)
+            jLabel2.setText("Wrong password/username or disabled account");
+        System.out.println(message);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        reset();
         frame.registerNav();
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    private void reset(){
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jLabel2.setText("");
+    }
+    
+    private void lockedCheck(int attemptCounter, String username){
+        if(attemptCounter==3){
+            frame.updateUser(username);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables

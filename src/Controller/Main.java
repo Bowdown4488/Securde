@@ -44,6 +44,17 @@ public class Main {
             System.out.println(" Role: " + users.get(nCtr).getRole());
             System.out.println(" Attempts: " + users.get(nCtr).getAttemptCounter());
         }
+        
+        System.out.println("================== ");
+        
+        // Create log database
+        sqlite.createNewLogDatabase();
+        
+        // Create logs table if not exist
+        sqlite.createLogTable();
+        
+//        sqlite.addLog("Error");
+        
         System.out.println("==================\nLogs: ");
         
         // Initialize User Interface

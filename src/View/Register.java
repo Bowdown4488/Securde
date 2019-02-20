@@ -136,6 +136,8 @@ public class Register extends javax.swing.JPanel {
                 if (isLetter && isDigit && isSpecial) {
                     System.out.println("Password: " + passwordField.getPassword());
                     if(frame.registerAction(username.getText(), passwordField.getPassword(), confirmPasswordField.getPassword())){
+                        String log = "User: [" + username.getText() + "] Was created";
+                        frame.addLog(log);
                         reset();
                         frame.loginNav();
                         message="User: "+ username.getText()+ " created" ;

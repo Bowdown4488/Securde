@@ -126,6 +126,8 @@ public class Login extends javax.swing.JPanel {
                     break;
                 }else{
                     message="wrong password";
+                    String log = "User: [" + users.get(index).getUsername() + "] Wrong password login attempt";
+                    frame.addLog(log);
                     frame.updateAttemptCounter(username,users.get(index).getAttemptCounter()+1); //Starts Counter For Locking saves in database
                     users.get(index).setAttemptCounter(users.get(index).getAttemptCounter()+1); //Starts Counter For Locking arrayList
                     lockedCheck(users.get(index).getAttemptCounter(),username);
@@ -134,6 +136,8 @@ public class Login extends javax.swing.JPanel {
             }
             if((jTextField1.getText().equals(users.get(index).getUsername()))){
                 message="disabled account";
+                String log = "User: [" + users.get(index).getUsername() + "] Disabled account login attempt";
+                frame.addLog(log);
                 break;
             }
             index++;

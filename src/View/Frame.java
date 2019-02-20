@@ -322,6 +322,10 @@ public class Frame extends javax.swing.JFrame {
         return main.sqlite.login(username, password);
     }
     
+    public void addLog(String message){
+        main.sqlite.addLog(message);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;

@@ -8,11 +8,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class SQLite {
     
     String driverURL = "jdbc:sqlite:" + "database.db";
+    String logURL = "jdbc:sqlite:" + "logs.db";
     
     public void createNewDatabase() {
         try (Connection conn = DriverManager.getConnection(driverURL)) {
@@ -183,39 +185,43 @@ public class SQLite {
         } catch (Exception ex) {}
     }
     
-    public static void main(String[] args) {
-        // Initialize a driver object
-        SQLite sqlite = new SQLite();
+    public void createNewLogDatabase() {
+        try (Connection conn = DriverManager.getConnection(logURL)) {
+            if (conn != null) {
+                DatabaseMetaData meta = conn.getMetaData();
+                System.out.println("Database logs.db created.");
+            }
+        } catch (Exception ex) {}
+    }
+    
+    public void createLogTable() {
+        String sql = "CREATE TABLE IF NOT EXISTS logs (\n"
+            + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
+            + " message TEXT NOT NULL,\n"
+            + " time TEXT NOT NULL\n"
+            + ");";
 
-        // Create a database
-        sqlite.createNewDatabase();
+        try (Connection conn = DriverManager.getConnection(logURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("Table logs in logs.db created.");
+        } catch (Exception ex) {}
+    }
+    
+    public void addLog(String message) {    
+        String sql = "INSERT INTO logs(message,time) VALUES(?,?)";
+        String time = LocalDateTime.now().toString();
         
-        // Drop users table if needed
-        sqlite.dropUserTable();
-        
-        // Create users table if not exist
-        sqlite.createUserTable();
-        
-        // Add users
-        sqlite.addUser("admin", "qwerty1234!" , 5, 0);
-        sqlite.addUser("manager", "qwerty1234!", 4, 0);
-        sqlite.addUser("staff", "qwerty1234!", 3, 0);
-        sqlite.addUser("client1", "qwerty1234!", 2, 0);
-        sqlite.addUser("client2", "qwerty1234!", 2, 0);
-        
-        // Get users
-        ArrayList<User> users = sqlite.getUsers();
-        for(int nCtr = 0; nCtr < users.size(); nCtr++){
-            System.out.println("===== User " + users.get(nCtr).getId() + " =====");
-            System.out.println(" Username: " + users.get(nCtr).getUsername());
-            System.out.println(" Password: " + users.get(nCtr).getPassword());
-            System.out.println(" Role: " + users.get(nCtr).getRole());
-            System.out.println(" Attempts: " + users.get(nCtr).getAttemptCounter());
-        }
-        System.out.println("==================\nLogs: ");
-        
-        System.out.println(sqlite.login("admin", "hello"));
-        System.out.println(sqlite.login("admin", "qwerty1234!"));
+        try (Connection conn = DriverManager.getConnection(logURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, message);
+            stmt.setString(2, time);
+            stmt.execute();
+            
+            System.out.println("Log added:" + message);
+            System.out.println("Time:" + time);
+            
+        } catch (Exception ex) { ex.printStackTrace(); }
     }
     
 }

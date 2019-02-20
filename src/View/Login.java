@@ -7,9 +7,12 @@ import java.util.ArrayList;
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
+    private PasswordField passwordField;
     
     public Login() {
         initComponents();
+        
+        passwordField = new PasswordField(jTextField2);
     }
 
     @SuppressWarnings("unchecked")
@@ -97,7 +100,7 @@ public class Login extends javax.swing.JPanel {
                 .addContainerGap(128, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         ArrayList<User> users = frame.getUser();
         int index = 0;
@@ -110,7 +113,7 @@ public class Login extends javax.swing.JPanel {
                 
                 //Insert Hash Here To Compare With Hashed Password in the database
                 
-                if (frame.login(jTextField1.getText(), jTextField2.getText())) {
+                if (frame.login(jTextField1.getText(), passwordField.getPassword())) {
                     //password = users.get(index).getPassword();
                     System.out.println("User:" + username +" Logged In");
                     frame.updateAttemptCounter(username,0);
@@ -147,7 +150,7 @@ public class Login extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
     private void reset(){
         jTextField1.setText("");
-        jTextField2.setText("");
+        passwordField.clear();
         jLabel2.setText("");
     }
     
@@ -166,3 +169,4 @@ public class Login extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
+

@@ -7,9 +7,13 @@ import java.util.regex.Pattern;
 public class Register extends javax.swing.JPanel {
 
     public Frame frame;
+    private PasswordField passwordField;
+    private PasswordField confirmPasswordField;
     
     public Register() {
         initComponents();
+        passwordField = new PasswordField(password);
+        confirmPasswordField = new PasswordField(confpass);
     }
 
     @SuppressWarnings("unchecked")
@@ -113,15 +117,15 @@ public class Register extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String message;
-        if(password.getText().equals(confpass.getText())){
-            if(password.getText().length()>=8){
+        if(passwordField.getPassword().equals(confirmPasswordField.getPassword())){
+            if(passwordField.length()>=8){
                 Pattern letter = Pattern.compile("[a-zA-z]");
                 Pattern digit = Pattern.compile("[0-9]");
                 Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
 
-                Matcher hasLetter = letter.matcher(password.getText());
-                Matcher hasDigit = digit.matcher(password.getText());
-                Matcher hasSpecial = special.matcher(password.getText());
+                Matcher hasLetter = letter.matcher(passwordField.getPassword());
+                Matcher hasDigit = digit.matcher(passwordField.getPassword());
+                Matcher hasSpecial = special.matcher(passwordField.getPassword());
                 
                 boolean isLetter = hasLetter.find();
                 boolean isDigit = hasDigit.find();
@@ -130,8 +134,8 @@ public class Register extends javax.swing.JPanel {
                 //If Statements For Logging Purposes
                 
                 if (isLetter && isDigit && isSpecial) {
-                    System.out.println("Password: " + password);
-                    if(frame.registerAction(username.getText(), password.getText(), confpass.getText())){
+                    System.out.println("Password: " + passwordField.getPassword());
+                    if(frame.registerAction(username.getText(), passwordField.getPassword(), confirmPasswordField.getPassword())){
                         reset();
                         frame.loginNav();
                         message="User: "+ username.getText()+ " created" ;
@@ -178,9 +182,9 @@ public class Register extends javax.swing.JPanel {
         frame.loginNav();
     }//GEN-LAST:event_jButton2ActionPerformed
     private void reset(){
-            password.setText("");
+            passwordField.clear();
+            confirmPasswordField.clear();
             username.setText("");
-            confpass.setText("");
             jLabel2.setText("");
     }
 

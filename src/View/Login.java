@@ -110,8 +110,8 @@ public class Login extends javax.swing.JPanel {
                 
                 //Insert Hash Here To Compare With Hashed Password in the database
                 
-                if(jTextField2.getText().equals(users.get(index).getPassword())){
-                    password = users.get(index).getPassword();
+                if (frame.login(jTextField1.getText(), jTextField2.getText())) {
+                    //password = users.get(index).getPassword();
                     System.out.println("User:" + username +" Logged In");
                     frame.updateAttemptCounter(username,0);
                     users.get(index).setAttemptCounter(0);

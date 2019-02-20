@@ -24,9 +24,8 @@ public class Frame extends javax.swing.JFrame {
         public void run(){
             if(loggedIn)
                 timeLoggedin++;
-                
             //TIMEOUT Put logs here if needed
-            if(timeLoggedin==60){
+            if(timeLoggedin==10){
                 frameView.show(Container, "loginPnl");
                 timeLoggedin = 0;
                 loggedIn=false;
@@ -317,6 +316,10 @@ public class Frame extends javax.swing.JFrame {
     
     public void updateAttemptCounter(String username, int attemptCounter){
         main.sqlite.updateAttemptCounter(username,attemptCounter);
+    }
+    
+    public boolean login(String username, String password) {
+        return main.sqlite.login(username, password);
     }
     
 

@@ -2,30 +2,30 @@ package View;
 
 import Controller.Main;
 import Model.User;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.util.ArrayList;
-import javax.swing.WindowConstants;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
-
+import javax.swing.WindowConstants;
 
 public class Frame extends javax.swing.JFrame {
+
     private int timeLoggedin = 0;
     private boolean loggedIn = false;
     private Timer x = new Timer();
+    
     public Frame() {
         initComponents();
         x.scheduleAtFixedRate(loginTimer, 1000, 1000);
     }
+    
     TimerTask loginTimer = new TimerTask(){
         public void run(){
             if(loggedIn)
                 timeLoggedin++;
             //TIMEOUT Put logs here if needed
-            if(timeLoggedin==10){
+            if(timeLoggedin==60){
                 frameView.show(Container, "loginPnl");
                 timeLoggedin = 0;
                 loggedIn=false;
@@ -34,6 +34,7 @@ public class Frame extends javax.swing.JFrame {
         }
         
     };
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -175,9 +176,9 @@ public class Frame extends javax.swing.JFrame {
         Container.setLayout(ContainerLayout);
         ContainerLayout.setHorizontalGroup(
             ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 801, Short.MAX_VALUE)
+            .addGap(0, 980, Short.MAX_VALUE)
             .addGroup(ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(HomePnl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(HomePnl, javax.swing.GroupLayout.DEFAULT_SIZE, 980, Short.MAX_VALUE))
         );
         ContainerLayout.setVerticalGroup(
             ContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,28 +202,32 @@ public class Frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void adminBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminBtnActionPerformed
+        adminHomePnl.showPnl("home");
         contentView.show(Content, "adminHomePnl");
         timeLoggedin = 0;
     }//GEN-LAST:event_adminBtnActionPerformed
 
     private void managerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerBtnActionPerformed
+        managerHomePnl.showPnl("home");
         contentView.show(Content, "managerHomePnl");
         timeLoggedin = 0;
     }//GEN-LAST:event_managerBtnActionPerformed
 
     private void staffBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffBtnActionPerformed
+        staffHomePnl.showPnl("home");
         contentView.show(Content, "staffHomePnl");
         timeLoggedin = 0;
     }//GEN-LAST:event_staffBtnActionPerformed
 
     private void clientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientBtnActionPerformed
+        clientHomePnl.showPnl("home");
         contentView.show(Content, "clientHomePnl");
         timeLoggedin = 0;
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         frameView.show(Container, "loginPnl");
-        loggedIn=false;
+        loggedIn = false;
         timeLoggedin = 0;
     }//GEN-LAST:event_logoutBtnActionPerformed
 
@@ -240,12 +245,17 @@ public class Frame extends javax.swing.JFrame {
     
     public void init(Main controller){
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setTitle("SECURDE");
+        this.setTitle("SECURDE - SECURITY Svcs");
         this.setLocationRelativeTo(null);
         
         this.main = controller;
         loginPnl.frame = this;
         registerPnl.frame = this;
+        
+        adminHomePnl.init(main.sqlite);
+        clientHomePnl.init(main.sqlite);
+        managerHomePnl.init(main.sqlite);
+        staffHomePnl.init(main.sqlite);
         
         Container.setLayout(frameView);
         Container.add(loginPnl, "loginPnl");
@@ -302,7 +312,6 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public boolean registerAction(String username, String password, String confpass){
-        //Database Hash here
         return main.sqlite.addUser(username, password);
     }
     
@@ -315,17 +324,12 @@ public class Frame extends javax.swing.JFrame {
     }
     
     public void updateAttemptCounter(String username, int attemptCounter){
-        main.sqlite.updateAttemptCounter(username,attemptCounter);
+        main.sqlite.updateAttemptCounter(username, attemptCounter);
     }
     
     public boolean login(String username, String password) {
         return main.sqlite.login(username, password);
     }
-    
-    public void addLog(String message){
-        main.sqlite.addLog(message);
-    }
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;

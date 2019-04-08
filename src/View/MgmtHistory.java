@@ -8,6 +8,7 @@ package View;
 import Controller.SQLite;
 import Model.History;
 import Model.Product;
+import Model.User;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -21,7 +22,7 @@ public class MgmtHistory extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
+    private User user;
     public MgmtHistory(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
@@ -39,7 +40,9 @@ public class MgmtHistory extends javax.swing.JPanel {
 //        reportBtn.setVisible(false);
     }
 
-    public void init(){
+    public void init(User user){
+        this.user=user;
+        System.out.println(user.getUsername()+" has logged/refreshed in at History");
 //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
@@ -197,7 +200,7 @@ public class MgmtHistory extends javax.swing.JPanel {
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void reloadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reloadBtnActionPerformed
-        init();
+        init(user);
     }//GEN-LAST:event_reloadBtnActionPerformed
 
 

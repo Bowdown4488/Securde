@@ -283,24 +283,29 @@ public class Frame extends javax.swing.JFrame {
             case 2:
                 //client
                 clientBtn.setVisible(true);
+                clientHomePnl.setUser(user);
                 contentView.show(Content, "clientHomePnl");
                 break;
             case 3:
                 //staff
                 staffBtn.setVisible(true);
+                staffHomePnl.setUser(user);
                 contentView.show(Content, "staffHomePnl");
                 break;
             case 4:
                 //manager
                 managerBtn.setVisible(true);
+                managerHomePnl.setUser(user);
                 contentView.show(Content, "managerHomePnl");
                 break;
             default:
                 //admin
                 adminBtn.setVisible(true);
+                adminHomePnl.setUser(user);
                 contentView.show(Content, "adminHomePnl");
                 break;
         }
+        
     }
     
     public void loginNav(){

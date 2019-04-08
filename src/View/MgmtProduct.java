@@ -7,6 +7,7 @@ package View;
 
 import Controller.SQLite;
 import Model.Product;
+import Model.User;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -21,7 +22,8 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
+    private int role;
+    private User user;
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
@@ -29,13 +31,16 @@ public class MgmtProduct extends javax.swing.JPanel {
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
 //        UNCOMMENT TO DISABLE BUTTONS
-//        purchaseBtn.setVisible(false);
+
 //        addBtn.setVisible(false);
 //        editBtn.setVisible(false);
 //        deleteBtn.setVisible(false);
     }
 
-    public void init(){
+    public void init(int role,User user){
+        this.user=user;
+        System.out.println(user.getUsername()+" has logged/refreshed in at Product");
+        setPrivilage(role);
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
@@ -48,6 +53,10 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getName(), 
                 products.get(nCtr).getStock(), 
                 products.get(nCtr).getPrice()});
+        }
+        
+        if(role != 2){
+             purchaseBtn.setVisible(false);
         }
     }
     
@@ -186,6 +195,14 @@ public class MgmtProduct extends javax.swing.JPanel {
 
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println(stockFld.getText());
+                if(Integer.parseInt(stockFld.getText())<=(Integer)tableModel.getValueAt(table.getSelectedRow(), 1)){
+                    int difference =(Integer)tableModel.getValueAt(table.getSelectedRow(), 1)-Integer.parseInt(stockFld.getText());
+                    sqlite.updateProduct((String)tableModel.getValueAt(table.getSelectedRow(), 0),(String)tableModel.getValueAt(table.getSelectedRow(), 0), difference, ((Float)tableModel.getValueAt(table.getSelectedRow(), 2)).doubleValue());
+                    init(role,user);
+                }else{
+                    JOptionPane.showMessageDialog(null, "You are buying more than the stock");
+                }
+                
             }
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
@@ -209,6 +226,8 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
+            sqlite.addProduct(nameFld.getText(), Integer.parseInt(stockFld.getText()), Double.parseDouble(priceFld.getText()));
+            init(role,user);
         }
     }//GEN-LAST:event_addBtnActionPerformed
 
@@ -229,9 +248,12 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
+                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(nameFld.getText());
                 System.out.println(stockFld.getText());
                 System.out.println(priceFld.getText());
+                sqlite.updateProduct((String)tableModel.getValueAt(table.getSelectedRow(), 0), nameFld.getText(), Integer.parseInt(stockFld.getText()), Double.parseDouble(priceFld.getText()));
+                init(role,user);
             }
         }
     }//GEN-LAST:event_editBtnActionPerformed
@@ -242,11 +264,17 @@ public class MgmtProduct extends javax.swing.JPanel {
             
             if (result == JOptionPane.YES_OPTION) {
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                sqlite.removeProduct((String)tableModel.getValueAt(table.getSelectedRow(), 0));
+                init(role,user);
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
-
+    private void setPrivilage (int userRole){
+        role = userRole;
+        System.out.println("User Role: " + role);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
     private javax.swing.JButton deleteBtn;

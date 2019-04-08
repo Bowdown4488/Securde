@@ -5,11 +5,12 @@
         <group>
             <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/Controller/Main.java</file>
             <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/Controller/SQLite.java</file>
-            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/Login.java</file>
-            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/Frame.java</file>
-            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/Model/User.java</file>
+            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/Controller/PasswordHasher.java</file>
             <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/MgmtUser.java</file>
-            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/Register.java</file>
+            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/MgmtProduct.java</file>
+            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/AdminHome.java</file>
+            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/MgmtHistory.java</file>
+            <file>file:/C:/Users/DELL/Documents/PAOLO'S%20FILES/College/3rdYear/Securde/SECURDE%20MP/securde-ms2/src/View/MgmtLogs.java</file>
         </group>
     </open-files>
 </project-private>

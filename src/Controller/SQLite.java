@@ -149,14 +149,7 @@ public class SQLite {
         } catch (Exception ex) {}
     }
     
-    public void addProduct(String name, int stock, double price) {
-        String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
-        
-        try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
-        } catch (Exception ex) {}
-    }
+
     
     public boolean addUser(String username, String password) {
         Password hashed = PasswordHasher.hash(password.toCharArray());
@@ -283,15 +276,75 @@ public class SQLite {
     }
     
     public void removeUser(String username) {
-        String sql = "DELETE FROM users WHERE username='" + username + "';";
-
+        String sql = "DELETE FROM users WHERE username = ?";
+        int result =0;
+        
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            System.out.println("User " + username + " has been deleted.");
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+            result = 1;
+        }catch (Exception ex) { /* Log: Log exception */ }
+        if (result == 1) {
+            System.out.println("User " + username + " has been deleted."); // Debug
+            // Log: User attempt counter set to N
+        }
+        
+        
+    }
+  
+    public void addProduct(String name, int stock, double price) {
+        String sql = "INSERT INTO product(name,stock,price) VALUES('" + name + "','" + stock + "','" + price + "')";
+        boolean result = false;
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            result = stmt.executeUpdate() > 0;
         } catch (Exception ex) {}
+        if (result == true) {
+            System.out.println("Product " + name + " has been added."); // Debug
+            // Log: User attempt counter set to N
+        }
     }
     
+    public void removeProduct(String productname) {
+        String sql = "DELETE from product WHERE name = ?";
+        int result =0;
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, productname);
+            stmt.executeUpdate();
+            result = 1;
+        }catch (Exception ex) { /* Log: Log exception */ }
+        if (result == 1) {
+            System.out.println("Product " + productname + " has been deleted."); // Debug
+            // Log: User attempt counter set to N
+        }
+        
+        
+    }
+    
+    public void updateProduct (String productName, String newName, int stock, double price){
+        String sql = "UPDATE product SET name = ?, stock = ?, price = ? WHERE name = ?";
+        int result = 0;
+        System.out.println("test");
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newName);
+            stmt.setInt(2, stock);
+            stmt.setDouble(3, price);
+            stmt.setString(4, productName);
+            stmt.executeUpdate();
+            
+            result = 1;
+        } catch (Exception ex) { /* Log: Log exception */ }
+        if (result == 1) {
+            System.out.println("Product: " + productName + " changed values to name->" + newName+" ,stock->"+stock+",price->"+price); // Debug
+            // Log: User attempt counter set to N
+        }
+    }
     public Product getProduct(String name){
         String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
         Product product = null;
@@ -304,7 +357,7 @@ public class SQLite {
         } catch (Exception ex) {}
         return product;
     }
-    
+
     protected byte[] getSalt(String username) throws Exception {
         String sql = "SELECT salt FROM users WHERE username = ?";
         
@@ -373,5 +426,69 @@ public class SQLite {
             System.out.println("User: " + username + " # of attempts ->" + attemptCounter); // Debug
             // Log: User attempt counter set to N
         }
+    }
+    
+    public void updateRole (String username, int role){
+        String sql = "UPDATE users SET role = ? WHERE username = ?";
+        int result = 0;
+        System.out.println("test");
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, role);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+            result = 1;
+        } catch (Exception ex) { /* Log: Log exception */ }
+        if (result == 1) {
+            System.out.println("User: " + username + " changed role to ->" + role); // Debug
+            // Log: User attempt counter set to N
+        }
+    }
+    
+    public void lockAccount (String username, int lock){
+        String sql = "UPDATE users SET locked = ? WHERE username = ?";
+        int result = 0;
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, lock);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+            result = 1;
+        } catch (Exception ex) { /* Log: Log exception */ }
+        if (result == 1) {
+            System.out.println("User: " + username + " was assigned " + lock); // Debug
+            // Log: User attempt counter set to N
+        }
+    }
+    
+    public void updatePassword(String username, String password) {
+        //Sorry Im not sure how to update hashed query password :((
+//        Password hashed = PasswordHasher.hash(password.toCharArray());
+//        
+////        String sql = "INSERT INTO users(username,password,salt) VALUES(?,?,?)";
+//        String sql = "UPDATE users SET password = ?, salt = ? WHERE username = ?"; 
+////        String sql = "UPDATE users SET password = PASSWORD(?) WHERE username = ?";
+//        int result = 0;
+//        
+//        System.out.println("test: " + username + " test: " + password);
+//        System.out.println("hashed: " + hashed);
+//        
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//            PreparedStatement stmt = conn.prepareStatement(sql)){
+//            stmt.setBytes(1, hashed.getHash());
+//            stmt.setBytes(2, hashed.getSalt());
+//            stmt.setString(2, username);
+//            stmt.executeUpdate();
+//            result = 1;
+//        } catch (Exception ex) { /* Log: Log exception */ }
+//        
+//        if (result == 1) {
+//            System.out.println("User: " + username + " password changed to: " + password);
+//            // Log: User added successfully
+//        } else {
+//            // Log: User was not added
+//        }
     }
 }

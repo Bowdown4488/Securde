@@ -24,7 +24,7 @@ public class SQLite {
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("Database database.db created.");
             }
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void createHistoryTable() {
@@ -40,7 +40,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table history in database.db created.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void createLogsTable() {
@@ -56,7 +56,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table logs in database.db created.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
      
     public void createProductTable() {
@@ -71,7 +71,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table product in database.db created.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
      
     public void createUserTable() {
@@ -88,7 +88,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table users in database.db created.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void dropHistoryTable() {
@@ -98,7 +98,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table history in database.db dropped.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void dropLogsTable() {
@@ -108,7 +108,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table logs in database.db dropped.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void dropProductTable() {
@@ -118,7 +118,7 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table product in database.db dropped.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void dropUserTable() {
@@ -128,16 +128,24 @@ public class SQLite {
             Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
             System.out.println("Table users in database.db dropped.");
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
     public void addHistory(String username, String name, int stock, String timestamp) {
         String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
+        boolean result = false;
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
-        } catch (Exception ex) {}
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            result = stmt.executeUpdate() > 0;
+        } catch (Exception ex) {/* Log: Log exception */}
+        
+        if (result) {
+            // Log: User added successfully
+        } else {
+            // Log: User was not added
+        }
+        
     }
     
     public void addLogs(String event, String username, String desc, String timestamp) {
@@ -146,7 +154,7 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
             stmt.execute(sql);
-        } catch (Exception ex) {}
+        } catch (Exception ex) {/* Log: Log exception */}
     }
     
 
@@ -341,7 +349,7 @@ public class SQLite {
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ }
         if (result == 1) {
-            System.out.println("Product: " + productName + " changed values to name->" + newName+" ,stock->"+stock+",price->"+price); // Debug
+            System.out.println("Product: " + productName + " changed values to name->" + newName+" ,stock->"+stock+",price->"+price); // Debug     
             // Log: User attempt counter set to N
         }
     }

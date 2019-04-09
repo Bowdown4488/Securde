@@ -115,52 +115,57 @@ public class Register extends javax.swing.JPanel {
         String message;
         if(password.getText().equals(confpass.getText())){
             if(password.getText().length()>=8){
-                Pattern letter = Pattern.compile("[a-zA-z]");
-                Pattern digit = Pattern.compile("[0-9]");
-                Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+                if(!username.getText().equals("")){
+                    Pattern letter = Pattern.compile("[a-zA-z]");
+                    Pattern digit = Pattern.compile("[0-9]");
+                    Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
 
-                Matcher hasLetter = letter.matcher(password.getText());
-                Matcher hasDigit = digit.matcher(password.getText());
-                Matcher hasSpecial = special.matcher(password.getText());
-                
-                boolean isLetter = hasLetter.find();
-                boolean isDigit = hasDigit.find();
-                boolean isSpecial = hasSpecial.find();
-                
-                //If Statements For Logging Purposes
-                
-                if (isLetter && isDigit && isSpecial) {
-                    System.out.println("Password: " + password.getText());
-                    if(frame.registerAction(username.getText(), password.getText(), confpass.getText())){
-                        reset();
-                        frame.loginNav();
-                        message="User: "+ username.getText()+ " created" ;
-                    }    
-                    else{
-                        message="Username not available";
+                    Matcher hasLetter = letter.matcher(password.getText());
+                    Matcher hasDigit = digit.matcher(password.getText());
+                    Matcher hasSpecial = special.matcher(password.getText());
+
+                    boolean isLetter = hasLetter.find();
+                    boolean isDigit = hasDigit.find();
+                    boolean isSpecial = hasSpecial.find();
+
+                    //If Statements For Logging Purposes
+
+                    if (isLetter && isDigit && isSpecial) {
+                        System.out.println("Password: " + password.getText());
+                        if(frame.registerAction(username.getText(), password.getText(), confpass.getText())){
+                            reset();
+                            frame.loginNav();
+                            message="User: "+ username.getText()+ " created" ;
+                        }    
+                        else{
+                            message="Username not available";
+                        }
                     }
+                    else if (!isLetter && isDigit && isSpecial){
+                        message="No Letters Found";
+                    }
+                    else if (isLetter && !isDigit && isSpecial){
+                        message="No Digit Found";
+                    }
+                    else if (isLetter && isDigit && !isSpecial){
+                        message="No Special Found";
+                    }
+                    else if (!isLetter && !isDigit && isSpecial){
+                        message="No Letters and Digit Found";
+                    }
+                    else if (!isLetter && isDigit && !isSpecial){
+                        message="No Letters and Special Found";
+                    }
+                    else if (isLetter && !isDigit && !isSpecial){
+                        message="No Digit and Special Found";
+                    }
+                    else {
+                        message="Password not created";
+                    } 
                 }
-                else if (!isLetter && isDigit && isSpecial){
-                    message="No Letters Found";
+                else{
+                    message="Empty Username Field";
                 }
-                else if (isLetter && !isDigit && isSpecial){
-                    message="No Digit Found";
-                }
-                else if (isLetter && isDigit && !isSpecial){
-                    message="No Special Found";
-                }
-                else if (!isLetter && !isDigit && isSpecial){
-                    message="No Letters and Digit Found";
-                }
-                else if (!isLetter && isDigit && !isSpecial){
-                    message="No Letters and Special Found";
-                }
-                else if (isLetter && !isDigit && !isSpecial){
-                    message="No Digit and Special Found";
-                }
-                else {
-                    message="Password not created";
-                } 
             }
             else{
                 message="Password Less Than 8 Characters";

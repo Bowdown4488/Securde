@@ -6,6 +6,7 @@
 package View;
 
 import Controller.SQLite;
+import Controller.Sanitize;
 import Model.History;
 import Model.Product;
 import Model.User;
@@ -23,6 +24,7 @@ public class MgmtHistory extends javax.swing.JPanel {
     public SQLite sqlite;
     public DefaultTableModel tableModel;
     private User user;
+    private Sanitize s;
     private Frame frame;
     public MgmtHistory(SQLite sqlite) {
         initComponents();
@@ -43,6 +45,7 @@ public class MgmtHistory extends javax.swing.JPanel {
 
     public void init(User user){
         this.user=user;
+        s = new Sanitize();
         System.out.println(user.getUsername()+" has logged/refreshed in at History");
 //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
@@ -171,9 +174,8 @@ public class MgmtHistory extends javax.swing.JPanel {
         };
 
         int result = JOptionPane.showConfirmDialog(null, message, "SEARCH HISTORY", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-//        frame.sanitize(searchFld.getText());
+        String search = s.sanitize(searchFld.getText());
         if (result == JOptionPane.OK_OPTION) {
-//        frame.sanitize(searchFld.getText());
 //          CLEAR TABLE
             for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
                 tableModel.removeRow(0);
@@ -182,9 +184,9 @@ public class MgmtHistory extends javax.swing.JPanel {
 //          LOAD CONTENTS
             ArrayList<History> history = sqlite.getHistory();
             for(int nCtr = 0; nCtr < history.size(); nCtr++){
-                if(searchFld.getText().contains(history.get(nCtr).getUsername()) || 
+                if(s.deSanitize(search).contains(history.get(nCtr).getUsername()) || 
                    history.get(nCtr).getUsername().contains(searchFld.getText()) || 
-                   searchFld.getText().contains(history.get(nCtr).getName()) || 
+                   s.deSanitize(search).contains(history.get(nCtr).getName()) || 
                    history.get(nCtr).getName().contains(searchFld.getText())){
                 
                     Product product = sqlite.getProduct(history.get(nCtr).getName());

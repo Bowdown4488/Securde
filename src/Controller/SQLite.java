@@ -476,30 +476,30 @@ public class SQLite {
     
     public void updatePassword(String username, String password) {
         //Sorry Im not sure how to update hashed query password :((
-//        Password hashed = PasswordHasher.hash(password.toCharArray());
-//        
-////        String sql = "INSERT INTO users(username,password,salt) VALUES(?,?,?)";
-//        String sql = "UPDATE users SET password = ?, salt = ? WHERE username = ?"; 
-////        String sql = "UPDATE users SET password = PASSWORD(?) WHERE username = ?";
-//        int result = 0;
-//        
-//        System.out.println("test: " + username + " test: " + password);
-//        System.out.println("hashed: " + hashed);
-//        
-//        try (Connection conn = DriverManager.getConnection(driverURL);
-//            PreparedStatement stmt = conn.prepareStatement(sql)){
-//            stmt.setBytes(1, hashed.getHash());
-//            stmt.setBytes(2, hashed.getSalt());
-//            stmt.setString(2, username);
-//            stmt.executeUpdate();
-//            result = 1;
-//        } catch (Exception ex) { /* Log: Log exception */ }
-//        
-//        if (result == 1) {
-//            System.out.println("User: " + username + " password changed to: " + password);
-//            // Log: User added successfully
-//        } else {
-//            // Log: User was not added
-//        }
+        Password hashed = PasswordHasher.hash(password.toCharArray());
+        
+//        String sql = "INSERT INTO users(username,password,salt) VALUES(?,?,?)";
+        String sql = "UPDATE users SET password = ?, salt = ? WHERE username = ?"; 
+//        String sql = "UPDATE users SET password = PASSWORD(?) WHERE username = ?";
+        int result = 0;
+        
+        System.out.println("test: " + username + " test: " + password);
+        System.out.println("hashed: " + hashed);
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setBytes(1, hashed.getHash());
+            stmt.setBytes(2, hashed.getSalt());
+            stmt.setString(3, username);
+            stmt.executeUpdate();
+            result = 1;
+        } catch (Exception ex) { /* Log: Log exception */ }
+        
+        if (result == 1) {
+            System.out.println("User: " + username + " password changed to: " + password);
+            // Log: User added successfully
+        } else {
+            // Log: User was not added
+        }
     }
 }

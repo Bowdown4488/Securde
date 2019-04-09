@@ -4,7 +4,9 @@ import Controller.Main;
 import Controller.Sanitize;
 import Model.User;
 import java.awt.CardLayout;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.JOptionPane;
@@ -15,6 +17,7 @@ public class Frame extends javax.swing.JFrame {
     private int timeLoggedin = 0;
     private boolean loggedIn = false;
     private Timer x = new Timer();
+    private User user;
     
     public Frame() {
         initComponents();
@@ -206,6 +209,7 @@ public class Frame extends javax.swing.JFrame {
         adminHomePnl.showPnl("home");
         contentView.show(Content, "adminHomePnl");
         timeLoggedin = 0;
+        
     }//GEN-LAST:event_adminBtnActionPerformed
 
     private void managerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_managerBtnActionPerformed
@@ -230,6 +234,7 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "loginPnl");
         loggedIn = false;
         timeLoggedin = 0;
+        main.sqlite.addLogs("NOTICE", user.getUsername(), user.getUsername() + " has logged out", new Timestamp(new Date().getTime()).toString());
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
@@ -276,6 +281,7 @@ public class Frame extends javax.swing.JFrame {
     
     public void mainNav(User user){
         frameView.show(Container, "homePnl");
+        setUser(user);
         loggedIn=true;
         adminBtn.setVisible(false);
         managerBtn.setVisible(false);
@@ -287,24 +293,28 @@ public class Frame extends javax.swing.JFrame {
                 clientBtn.setVisible(true);
                 clientHomePnl.setUser(user);
                 contentView.show(Content, "clientHomePnl");
+                main.sqlite.addLogs("NOTICE", user.getUsername(), user.getUsername() + " has logged in", new Timestamp(new Date().getTime()).toString());
                 break;
             case 3:
                 //staff
                 staffBtn.setVisible(true);
                 staffHomePnl.setUser(user);
                 contentView.show(Content, "staffHomePnl");
+                main.sqlite.addLogs("NOTICE", user.getUsername(), user.getUsername() + " has logged in", new Timestamp(new Date().getTime()).toString());
                 break;
             case 4:
                 //manager
                 managerBtn.setVisible(true);
                 managerHomePnl.setUser(user);
                 contentView.show(Content, "managerHomePnl");
+                main.sqlite.addLogs("NOTICE", user.getUsername(), user.getUsername() + " has logged in", new Timestamp(new Date().getTime()).toString());
                 break;
             default:
                 //admin
                 adminBtn.setVisible(true);
                 adminHomePnl.setUser(user);
                 contentView.show(Content, "adminHomePnl");
+                main.sqlite.addLogs("NOTICE", user.getUsername(), user.getUsername() + " has logged in", new Timestamp(new Date().getTime()).toString());
                 break;
         }
         
@@ -344,6 +354,10 @@ public class Frame extends javax.swing.JFrame {
     
     public String deSanitize(String input){
         return s.deSanitize(input);
+    }
+    
+    public void setUser (User user){
+        this.user = user;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

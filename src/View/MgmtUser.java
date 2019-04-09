@@ -279,11 +279,13 @@ public class MgmtUser extends javax.swing.JPanel {
             
             if (result == JOptionPane.OK_OPTION) {
                 String user = s.sanitize((String)tableModel.getValueAt(table.getSelectedRow(), 0));
+                String pass = s.sanitize(password.getText());
+                String conf = s.sanitize(confpass.getText());
                 String userpass = password.getText();
                 String userconfpass = confpass.getText();
                 System.out.println("Password: " + userpass);
                 System.out.println("Confirm Password: " + userconfpass);
-                if(userpass.equals(userconfpass)){
+                if(pass.equals(conf)){
                     if(password.getText().length()>=8){
                         Pattern letter = Pattern.compile("[a-zA-z]");
                         Pattern digit = Pattern.compile("[0-9]");
@@ -301,7 +303,7 @@ public class MgmtUser extends javax.swing.JPanel {
 
                         if (isLetter && isDigit && isSpecial) {
                             System.out.println("Valid password");
-                            sqlite.updatePassword(user, userpass);
+                            sqlite.updatePassword(user, pass);
                             //Insert Query Here
                         }
                         else if (!isLetter && isDigit && isSpecial){

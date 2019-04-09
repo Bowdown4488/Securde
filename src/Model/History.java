@@ -15,34 +15,37 @@ import java.util.Date;
  * @author beepxD
  */
 public class History {
-    
+
     private int id;
     private String username;
     private String name;
     private int stock;
+    private double price;
     private Timestamp timestamp;
 
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-    
-    public History(String username, String name, int stock){
+
+    public History(String username, String name, int stock, int price) {
         this.username = username;
         this.name = name;
         this.stock = stock;
         this.timestamp = new Timestamp(new Date().getTime());
+        this.price = price;
     }
-    
-    public History(int id, String username, String name, int stock, String timestamp){
+
+    public History(int id, String username, String name, int stock, int price, String timestamp) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.stock = stock;
+        this.price = price;
         try {
             this.timestamp = new Timestamp(dateformat.parse(timestamp).getTime());
         } catch (ParseException ex) {
             ex.printStackTrace();
         }
     }
-    
+
     public int getId() {
         return id;
     }
@@ -74,12 +77,26 @@ public class History {
     public void setStock(int stock) {
         this.stock = stock;
     }
-    
+
     public Timestamp getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    /**
+     * @return the price
+     */
+    public double getPrice() {
+        return price;
+    }
+
+    /**
+     * @param price the price to set
+     */
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

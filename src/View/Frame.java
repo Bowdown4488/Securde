@@ -1,6 +1,7 @@
 package View;
 
 import Controller.Main;
+import Controller.Sanitize;
 import Model.User;
 import java.awt.CardLayout;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Frame extends javax.swing.JFrame {
             if(loggedIn)
                 timeLoggedin++;
             //TIMEOUT Put logs here if needed
-            if(timeLoggedin==60){
+            if(timeLoggedin==5000){
                 frameView.show(Container, "loginPnl");
                 timeLoggedin = 0;
                 loggedIn=false;
@@ -234,6 +235,7 @@ public class Frame extends javax.swing.JFrame {
     public Main main;
     public Login loginPnl = new Login();
     public Register registerPnl = new Register();
+    public Sanitize s = new Sanitize();
     
     private AdminHome adminHomePnl = new AdminHome();
     private ManagerHome managerHomePnl = new ManagerHome();
@@ -334,6 +336,14 @@ public class Frame extends javax.swing.JFrame {
     
     public boolean login(String username, String password) {
         return main.sqlite.login(username, password);
+    }
+    
+    public String sanitize(String input){
+        return s.sanitize(input);
+    }
+    
+    public String deSanitize(String input){
+        return s.deSanitize(input);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

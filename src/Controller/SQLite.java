@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class SQLite {
     
     public int DEBUG_MODE = 0;
+    private Sanitize s = new Sanitize();
     String driverURL = "jdbc:sqlite:" + "database.db";
     
     public void createNewDatabase() {
@@ -33,6 +34,7 @@ public class SQLite {
             + " username TEXT NOT NULL,\n"
             + " name TEXT NOT NULL,\n"
             + " stock INTEGER DEFAULT 0,\n"
+            + " price DOUBLE DEFAULT 0, \n"
             + " timestamp TEXT NOT NULL\n"
             + ");";
 
@@ -131,8 +133,8 @@ public class SQLite {
         } catch (Exception ex) {/* Log: Log exception */}
     }
     
-    public void addHistory(String username, String name, int stock, String timestamp) {
-        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
+    public void addHistory(String username, String name, int stock, double price,String timestamp) {
+        String sql = "INSERT INTO history(username,name,stock,price,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + price + "','" +timestamp + "')";
         boolean result = false;
         
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -183,7 +185,7 @@ public class SQLite {
     
     
     public ArrayList<History> getHistory(){
-        String sql = "SELECT id, username, name, stock, timestamp FROM history";
+        String sql = "SELECT id, username, name, stock, price, timestamp FROM history";
         ArrayList<History> histories = new ArrayList<History>();
         
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -192,10 +194,11 @@ public class SQLite {
             
             while (rs.next()) {
                 histories.add(new History(rs.getInt("id"),
-                                   rs.getString("username"),
-                                   rs.getString("name"),
-                                   rs.getInt("stock"),
-                                   rs.getString("timestamp")));
+                        rs.getString("username"),
+                        rs.getString("name"),
+                        rs.getInt("stock"),
+                        rs.getInt("price"),
+                        rs.getString("timestamp")));
             }
         } catch (Exception ex) {}
         return histories;
@@ -431,7 +434,7 @@ public class SQLite {
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ }
         if (result == 1) {
-            System.out.println("User: " + username + " # of attempts ->" + attemptCounter); // Debug
+            System.out.println("User: " + s.deSanitize(username) + " # of attempts ->" + attemptCounter); // Debug
             // Log: User attempt counter set to N
         }
     }

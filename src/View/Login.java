@@ -103,14 +103,16 @@ public class Login extends javax.swing.JPanel {
         String username,password;
         String message = "";
         boolean pass=false;
+        String user = frame.sanitize(jTextField1.getText());
+        String pas = frame.sanitize( jTextField2.getText());
         while(users.size() > index){
-            if((jTextField1.getText().equals(users.get(index).getUsername()))&&users.get(index).getLocked()!=3){
-                username = users.get(index).getUsername();
-                //Insert Hash Here To Compare With Hashed Password in the database
+            if((user.equals(users.get(index).getUsername()))&&users.get(index).getLocked()!=3){
+                username = users.get(index).getUsername();                
                 
-                if (frame.login(jTextField1.getText(), jTextField2.getText())) {
+                if (frame.login(user, pas)) {
                     //password = users.get(index).getPassword();
-                    System.out.println("User:" + username +" Logged In");
+                    users.get(index).setUsername(frame.deSanitize(username));
+                    System.out.println("User:" + frame.deSanitize(username) + "Logged In");
                     frame.updateAttemptCounter(username,0);
                     users.get(index).setLocked(0);
                     System.out.println("Reset Attempts:" + users.get(index).getLocked());

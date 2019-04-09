@@ -113,6 +113,10 @@ public class Register extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String message;
+        String user,pass,conf;
+        user = frame.sanitize(username.getText());
+        pass = frame.sanitize(password.getText());
+        conf = frame.sanitize(confpass.getText());
         if(password.getText().equals(confpass.getText())){
             if(password.getText().length()>=8){
                 if(!username.getText().equals("")){
@@ -132,10 +136,10 @@ public class Register extends javax.swing.JPanel {
 
                     if (isLetter && isDigit && isSpecial) {
                         System.out.println("Password: " + password.getText());
-                        if(frame.registerAction(username.getText(), password.getText(), confpass.getText())){
+                        if(frame.registerAction(user, pass, conf)){
                             reset();
                             frame.loginNav();
-                            message="User: "+ username.getText()+ " created" ;
+                            message="User: "+ frame.deSanitize(user) + " created" ;
                         }    
                         else{
                             message="Username not available";

@@ -6,6 +6,7 @@
 package View;
 
 import Controller.SQLite;
+import Controller.Sanitize;
 import Model.User;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -28,9 +29,11 @@ public class MgmtUser extends javax.swing.JPanel {
     public DefaultTableModel tableModel;
     private int role;
     private User user;
+    private Sanitize s;
     public MgmtUser(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
+        s = new Sanitize();
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         
@@ -55,7 +58,7 @@ public class MgmtUser extends javax.swing.JPanel {
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
             if(users.get(nCtr).getRole()<role){
                 tableModel.addRow(new Object[]{
-                users.get(nCtr).getUsername(), 
+                s.deSanitize(users.get(nCtr).getUsername()), 
                 users.get(nCtr).getPassword(), 
                 users.get(nCtr).getRole(), 
                 users.get(nCtr).getLocked()});

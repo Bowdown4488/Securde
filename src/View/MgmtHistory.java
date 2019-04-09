@@ -23,6 +23,7 @@ public class MgmtHistory extends javax.swing.JPanel {
     public SQLite sqlite;
     public DefaultTableModel tableModel;
     private User user;
+    private Frame frame;
     public MgmtHistory(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
@@ -56,8 +57,8 @@ public class MgmtHistory extends javax.swing.JPanel {
                 history.get(nCtr).getUsername(), 
                 history.get(nCtr).getName(), 
                 history.get(nCtr).getStock(), 
-                product.getPrice(), 
-                product.getPrice() * history.get(nCtr).getStock(), 
+                history.get(nCtr).getPrice(),
+                history.get(nCtr).getPrice() * history.get(nCtr).getStock(),
                 history.get(nCtr).getTimestamp()
             });
         }
@@ -170,8 +171,9 @@ public class MgmtHistory extends javax.swing.JPanel {
         };
 
         int result = JOptionPane.showConfirmDialog(null, message, "SEARCH HISTORY", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-
+//        frame.sanitize(searchFld.getText());
         if (result == JOptionPane.OK_OPTION) {
+//        frame.sanitize(searchFld.getText());
 //          CLEAR TABLE
             for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
                 tableModel.removeRow(0);
@@ -190,8 +192,8 @@ public class MgmtHistory extends javax.swing.JPanel {
                         history.get(nCtr).getUsername(), 
                         history.get(nCtr).getName(), 
                         history.get(nCtr).getStock(), 
-                        product.getPrice(), 
-                        product.getPrice() * history.get(nCtr).getStock(), 
+                        history.get(nCtr).getPrice(),
+                        history.get(nCtr).getPrice() * history.get(nCtr).getStock(),
                         history.get(nCtr).getTimestamp()
                     });
                 }

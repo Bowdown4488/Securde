@@ -6,6 +6,7 @@
 package View;
 
 import Controller.SQLite;
+import Controller.Sanitize;
 import Model.Product;
 import Model.User;
 import java.sql.Timestamp;
@@ -26,6 +27,7 @@ public class MgmtProduct extends javax.swing.JPanel {
     public DefaultTableModel tableModel;
     private int role;
     private User user;
+    private Sanitize s = new Sanitize();
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
@@ -213,16 +215,17 @@ public class MgmtProduct extends javax.swing.JPanel {
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
-
+            
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println(stockFld.getText());
                 if(!validateInt(stockFld.getText())){
+                    s.sanitize(stockFld.getText());
                     JOptionPane.showMessageDialog(null, "Enter Integer Numbers only");
                 }else{
                     if(Integer.parseInt(stockFld.getText())<=(Integer)tableModel.getValueAt(table.getSelectedRow(), 1)){
                         int difference =(Integer)tableModel.getValueAt(table.getSelectedRow(), 1)-Integer.parseInt(stockFld.getText());
                         sqlite.updateProduct((String)tableModel.getValueAt(table.getSelectedRow(), 0),(String)tableModel.getValueAt(table.getSelectedRow(), 0), difference, ((Float)tableModel.getValueAt(table.getSelectedRow(), 2)).doubleValue());
-                        sqlite.addHistory(user.getUsername(), (String)tableModel.getValueAt(table.getSelectedRow(),0), Integer.parseInt(stockFld.getText()), new Timestamp(new Date().getTime()).toString());
+                        sqlite.addHistory(user.getUsername(), (String)tableModel.getValueAt(table.getSelectedRow(),0), Integer.parseInt(stockFld.getText()), ((Float) tableModel.getValueAt(table.getSelectedRow(), 2)).doubleValue(), new Timestamp(new Date().getTime()).toString());
                         init(role,user);
                     }else{
                         JOptionPane.showMessageDialog(null, "You are buying more than the stock");
@@ -253,6 +256,9 @@ public class MgmtProduct extends javax.swing.JPanel {
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
+            s.sanitize(nameFld.getText());
+            s.sanitize(stockFld.getText());
+            s.sanitize(priceFld.getText());
             if(!validateString(nameFld.getText())){
                 JOptionPane.showMessageDialog(null, "Name is Empty");
             }else if(!validateInt(stockFld.getText())){

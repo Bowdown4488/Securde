@@ -30,6 +30,9 @@ public class MgmtProduct extends javax.swing.JPanel {
     private int role;
     private User user;
     private Sanitize s;
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    String errorMessage;
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;

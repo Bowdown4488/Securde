@@ -202,10 +202,10 @@ public class MgmtUser extends javax.swing.JPanel {
             String[] options = {"2-CLIENT","3-STAFF","4-MANAGER"};
             JComboBox optionList = new JComboBox(options);
             
-            optionList.setSelectedIndex((int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1);
+            optionList.setSelectedIndex(2);
             
             String result = (String) JOptionPane.showInputDialog(null, "USER: " + tableModel.getValueAt(table.getSelectedRow(), 0), 
-                "EDIT USER ROLE", JOptionPane.QUESTION_MESSAGE, null, options, options[(int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1]);
+                "EDIT USER ROLE", JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             
             if(result != null){
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));

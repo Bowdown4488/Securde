@@ -21,36 +21,6 @@ public class Sanitize {
     String slash = "/";
     String quote = "\"";
     String ampersand = "&";
-//    String escape = "['\"\\\\&<>]";
-//    Pattern regex = Pattern.compile("[$&+,:;=?@#|]+");
-//    Pattern pattern = Pattern.compile(escape);
-
-    public static void main(String[] args) {
-        Sanitize v = new Sanitize();
-        String desanitize = v.sanitize("hell;o&semi1");
-        v.deSanitize(desanitize);
-        String desanitizes = v.sanitize("<script> console.alert('XSS'); console.log('HACKED')&lg&gt&amp;</script>");
-        v.deSanitize(desanitizes);
-        System.out.println(v.validate("asdasdasdasdasdasdasdasdasdasdas")); // return false > 32
-        System.out.println(v.validate("asdasdasdasdasdasdasdasdasdasdas")); // return false > 32
-        System.out.println(v.validate(100000000)); // return false > 2 billion
-        System.out.println(v.validate(100.101)); // false 3 decimals
-    }
-
-    public boolean validate(Object input) {
-        if (input instanceof String) {
-            input = sanitize((String) input);
-            validated = validateStringSize((String) input);
-            System.out.println(validateStringSize((String) input));
-            return validated;
-        } else if (input instanceof Integer) {
-            validated = validateIntSize(Integer.toString((int) input));
-            return validated;
-        } else if (input instanceof Double) {
-            validated = validateDoubleSize(Double.toString((double) input));
-        }
-        return validated;
-    }
 
     public String sanitize(String input) {
         input = input.contains("&") ? input.replaceAll("&", "&amp") : input;
@@ -70,16 +40,6 @@ public class Sanitize {
         System.out.println("input desanitized = " + input);
         return input;
     }
-//
-//    public void match(String input){
-//        Matcher matcher = regex.matcher(input);
-//        if(matcher.find()){
-//            String out = matcher.group();
-//            out = out.replaceAll(";", "&semi");
-//            System.out.println("out = " + out);
-//        }
-//        
-//    }
 
     public boolean validateStringSize(String input) {
 

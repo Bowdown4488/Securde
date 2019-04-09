@@ -62,9 +62,19 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getPrice()});
         }
         
-//        if(role != 2){
-//             purchaseBtn.setVisible(false);
-//        }
+        if(role != 2){
+             purchaseBtn.setVisible(false);
+        }
+        
+        if(role!=3 && role !=4 && role != 5){
+            addBtn.setVisible(false);
+        }
+        if(role!=3 && role !=4 && role != 5){
+            editBtn.setVisible(false);
+        }
+        if(role!=3 && role !=4 && role != 5){
+            deleteBtn.setVisible(false);
+        }
     }
     
     public void designer(JTextField component, String text){
@@ -201,8 +211,15 @@ public class MgmtProduct extends javax.swing.JPanel {
             int x= Integer.parseInt(input);
             return x>0;
         }catch(NumberFormatException ex){
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(sqlite.DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                sqlite.addLogs("ERROR", user.getUsername(), errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User input a string instead of integer";
+                sqlite.addLogs("ERROR", user.getUsername(), errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
             return false;
         }
     }
@@ -212,8 +229,15 @@ public class MgmtProduct extends javax.swing.JPanel {
                 Double x = Double.parseDouble(input);
                 return x>0;
             }catch(NumberFormatException ex){
+            if(sqlite.DEBUG_MODE == 1){
                 ex.printStackTrace(pw);
                 errorMessage = sw.toString();
+                sqlite.addLogs("ERROR", user.getUsername(), errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User input a string instead of double";
+                sqlite.addLogs("ERROR", user.getUsername(), errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
                 return false;
             }
         }else{

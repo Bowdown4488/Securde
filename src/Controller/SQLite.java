@@ -13,7 +13,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class SQLite {
     
@@ -30,8 +32,15 @@ public class SQLite {
                 System.out.println("Database database.db created.");
             }
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Database not created";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -50,8 +59,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table history in database.db created.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table History not created";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -69,8 +85,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table logs in database.db created.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Logs not created";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
      
@@ -87,8 +110,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table product in database.db created.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Products not created";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
      
@@ -107,8 +137,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table users in database.db created.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Users not created";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -120,8 +157,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table history in database.db dropped.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Histories not dropped";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -133,8 +177,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table logs in database.db dropped.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Logs not dropped";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -146,8 +197,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table product in database.db dropped.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Products not dropped";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -159,8 +217,15 @@ public class SQLite {
             stmt.execute(sql);
             System.out.println("Table users in database.db dropped.");
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Table Users not dropped";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
     }
     
@@ -171,25 +236,27 @@ public class SQLite {
         try (Connection conn = DriverManager.getConnection(driverURL);
             PreparedStatement stmt = conn.prepareStatement(sql)){
             result = stmt.executeUpdate() > 0;
+            addLogs("NOTICE", name, name + " was succesfully updated in history table", new Timestamp(new Date().getTime()).toString());
         } catch (Exception ex) {/* Log: Log exception */
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
-        }
-        
-        if (result) {
-            // Log: User added successfully
-        } else {
-            // Log: User was not added
-        }
-        
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "History data not added";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+        }  
     }
     
     public void addLogs(String event, String username, String desc, String timestamp) {
         String sql = "INSERT INTO logs(event,username,desc,timestamp) VALUES('" + event + "','" + username + "','" + desc + "','" + timestamp + "')";
+        boolean result = false;
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement()){
-            stmt.execute(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            result = stmt.executeUpdate() > 0;
         } catch (Exception ex) {/* Log: Log exception */
             ex.printStackTrace(pw);
             errorMessage = sw.toString();
@@ -211,14 +278,15 @@ public class SQLite {
             stmt.setBytes(3, hashed.getSalt());
             result = stmt.executeUpdate() > 0;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
-        }
-        
-        if (result) {
-            // Log: User added successfully
-        } else {
-            // Log: User was not added
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User not added";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
         return result;
     }
@@ -241,8 +309,15 @@ public class SQLite {
                         rs.getString("timestamp")));
             }
         } catch (Exception ex) {
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "History List not added";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
         return histories;
     }
@@ -263,8 +338,15 @@ public class SQLite {
                                    rs.getString("timestamp")));
             }
         } catch (Exception ex) {
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Logs List not added";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
         return logs;
     }
@@ -284,8 +366,15 @@ public class SQLite {
                                    rs.getFloat("price")));
             }
         } catch (Exception ex) {
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Products List not added";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
         return products;
     }
@@ -306,8 +395,15 @@ public class SQLite {
                                    rs.getInt("locked")));
             }
         } catch (Exception ex) {
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Users List not added";
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
         return users;
     }
@@ -328,13 +424,15 @@ public class SQLite {
             result = stmt.executeUpdate() > 0;
             
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
-        }
-        if (result) {
-            // Log: User added successfully
-        } else {
-            // Log: User was not added
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", "No User", errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User not added";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
         }
         return result;
     }
@@ -348,13 +446,21 @@ public class SQLite {
             stmt.setString(1, username);
             stmt.executeUpdate();
             result = 1;
-        }catch (Exception ex) { /* Log: Log exception */ }
+        }catch (Exception ex) { /* Log: Log exception */ 
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User not removed";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }   
+        }
         if (result == 1) {
             System.out.println("User " + username + " has been deleted."); // Debug
             // Log: User attempt counter set to N
-        }
-        
-        
+        } 
     }
   
     public void addProduct(String name, int stock, double price) {
@@ -365,8 +471,15 @@ public class SQLite {
             PreparedStatement stmt = conn.prepareStatement(sql)){
             result = stmt.executeUpdate() > 0;
         } catch (Exception ex) {
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", name, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Product not added";
+                addLogs("ERROR", name, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         if (result == true) {
             System.out.println("Product " + name + " has been added."); // Debug
@@ -384,8 +497,15 @@ public class SQLite {
             stmt.executeUpdate();
             result = 1;
         }catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", productname, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Product not removed";
+                addLogs("ERROR", productname, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }   
         }
         if (result == 1) {
             System.out.println("Product " + productname + " has been deleted."); // Debug
@@ -407,11 +527,18 @@ public class SQLite {
             stmt.setDouble(3, price);
             stmt.setString(4, productName);
             stmt.executeUpdate();
-            
+            addLogs("NOTICE", productName, productName + " was succesfully updated in product table", new Timestamp(new Date().getTime()).toString());
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", productName, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Product not updated";
+                addLogs("ERROR", productName, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }  
         }
         if (result == 1) {
             System.out.println("Product: " + productName + " changed values to name->" + newName+" ,stock->"+stock+",price->"+price); // Debug     
@@ -428,8 +555,15 @@ public class SQLite {
                                    rs.getInt("stock"),
                                    rs.getFloat("price"));
         } catch (Exception ex) {
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", name, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Product was not retreived";
+                addLogs("ERROR", name, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         return product;
     }
@@ -472,13 +606,15 @@ public class SQLite {
             ResultSet rs = stmt.executeQuery();
             result = rs.getInt(1) > 0;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
-        }
-        if (result) {
-            // Log: Login successful
-        } else {
-            // Log: Login failed
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User unsuccesful login";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         return result;
     }
@@ -494,8 +630,15 @@ public class SQLite {
             System.out.println("User " + username + " locked"); // Debug
             // Log: User locked
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User details not updated";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
     }
     
@@ -510,8 +653,15 @@ public class SQLite {
             stmt.executeUpdate();
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User attempt counter not updated";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         if (result == 1) {
             System.out.println("User: " + s.deSanitize(username) + " # of attempts ->" + attemptCounter); // Debug
@@ -531,8 +681,15 @@ public class SQLite {
             stmt.executeUpdate();
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User role not updated";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         if (result == 1) {
             System.out.println("User: " + username + " changed role to ->" + role); // Debug
@@ -551,8 +708,15 @@ public class SQLite {
             stmt.executeUpdate();
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "Users account entry not updated";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         if (result == 1) {
             System.out.println("User: " + username + " was assigned " + lock); // Debug
@@ -580,8 +744,15 @@ public class SQLite {
             stmt.executeUpdate();
             result = 1;
         } catch (Exception ex) { /* Log: Log exception */ 
-            ex.printStackTrace(pw);
-            errorMessage = sw.toString();
+            if(DEBUG_MODE == 1){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            }
+            else{
+                errorMessage = "User password not updated";
+                addLogs("ERROR", username, errorMessage, new Timestamp(new Date().getTime()).toString());
+            } 
         }
         
         if (result == 1) {

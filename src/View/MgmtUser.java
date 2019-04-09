@@ -72,6 +72,10 @@ public class MgmtUser extends javax.swing.JPanel {
         if (role != 5){
             lockBtn.setVisible(false);
         }
+        
+        if (role != 5){
+            deleteBtn.setVisible(false);
+        }
     }
 
     public void designer(JTextField component, String text){

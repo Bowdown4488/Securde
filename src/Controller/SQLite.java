@@ -5,6 +5,8 @@ import Model.Logs;
 import Model.Password;
 import Model.Product;
 import Model.User;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -18,6 +20,9 @@ public class SQLite {
     public int DEBUG_MODE = 0;
     private Sanitize s = new Sanitize();
     String driverURL = "jdbc:sqlite:" + "database.db";
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    String errorMessage;
     
     public void createNewDatabase() {
         try (Connection conn = DriverManager.getConnection(driverURL)) {
@@ -25,7 +30,10 @@ public class SQLite {
                 DatabaseMetaData meta = conn.getMetaData();
                 System.out.println("Database database.db created.");
             }
-        } catch (Exception ex) {/* Log: Log exception */}
+        } catch (Exception ex) {
+            ex.printStackTrace(pw);
+            errorMessage = sw.toString();
+        }
     }
     
     public void createHistoryTable() {

@@ -9,6 +9,8 @@ import Controller.SQLite;
 import Controller.Sanitize;
 import Model.Product;
 import Model.User;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +30,9 @@ public class MgmtProduct extends javax.swing.JPanel {
     private int role;
     private User user;
     private Sanitize s;
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    String errorMessage;
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
@@ -195,6 +200,8 @@ public class MgmtProduct extends javax.swing.JPanel {
             Integer.parseInt(input);
             return true;
         }catch(NumberFormatException ex){
+            ex.printStackTrace(pw);
+            errorMessage = sw.toString();
             return false;
         }
     }

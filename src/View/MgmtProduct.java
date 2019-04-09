@@ -9,6 +9,8 @@ import Controller.SQLite;
 import Controller.Sanitize;
 import Model.Product;
 import Model.User;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -186,25 +188,38 @@ public class MgmtProduct extends javax.swing.JPanel {
                     .addComponent(editBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
     }// </editor-fold>//GEN-END:initComponents
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    String errorMessage;
     public boolean validateString(String s){
         return (s.length()>0);
         
     }
     public boolean validateInt(String input){
+        
         try{
-            Integer.parseInt(input);
-            return true;
+            int x= Integer.parseInt(input);
+            return x>0;
         }catch(NumberFormatException ex){
+            ex.printStackTrace(pw);
+            errorMessage = sw.toString();
             return false;
         }
     }
     public boolean validateDouble(String input){
-        try{
-            Double.parseDouble(input);
-            return true;
-        }catch(NumberFormatException ex){
+        if(input.matches("^\\d+\\.\\d$")){
+            try{
+                Double x = Double.parseDouble(input);
+                return x>0;
+            }catch(NumberFormatException ex){
+                ex.printStackTrace(pw);
+                errorMessage = sw.toString();
+                return false;
+            }
+        }else{
             return false;
         }
+
     }
     private void purchaseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseBtnActionPerformed
         if(table.getSelectedRow() >= 0){
@@ -221,7 +236,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                 System.out.println(stockFld.getText());
                 if(!validateInt(stockFld.getText())){
                     s.sanitize(stockFld.getText());
-                    JOptionPane.showMessageDialog(null, "Enter Integer Numbers only");
+                    JOptionPane.showMessageDialog(null, "Please enter proper interger numbers");
                 }else{
                     if(Integer.parseInt(stockFld.getText())<=(Integer)tableModel.getValueAt(table.getSelectedRow(), 1)){
                         int difference =(Integer)tableModel.getValueAt(table.getSelectedRow(), 1)-Integer.parseInt(stockFld.getText());
@@ -263,9 +278,9 @@ public class MgmtProduct extends javax.swing.JPanel {
             if(!validateString(nameFld.getText())){
                 JOptionPane.showMessageDialog(null, "Name is Empty");
             }else if(!validateInt(stockFld.getText())){
-                JOptionPane.showMessageDialog(null, "Enter Integer Numbers only for Stock");
+                JOptionPane.showMessageDialog(null, "Please enter proper interger numbers");
             }else if(!validateDouble(priceFld.getText())){
-                JOptionPane.showMessageDialog(null, "Enter Integer Numbers only for Price");
+                JOptionPane.showMessageDialog(null, "Please enter proper double numbers");
             }else{
                 sqlite.addProduct(s.sanitize(nameFld.getText()), Integer.parseInt(stockFld.getText()), Double.parseDouble(priceFld.getText()));
                 init(role,user);

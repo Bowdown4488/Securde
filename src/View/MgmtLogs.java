@@ -6,8 +6,21 @@
 package View;
 
 import Controller.SQLite;
+
 import Model.Logs;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +31,9 @@ public class MgmtLogs extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    String errorMessage;
     
     public MgmtLogs(SQLite sqlite) {
         initComponents();
@@ -135,7 +151,12 @@ public class MgmtLogs extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
-        
+        copyFile();
+        JOptionPane.showMessageDialog(null, "The logs has been appended to text file"); 
+        sqlite.dropLogsTable();
+        sqlite.createLogsTable();
+        sqlite.addLogs("LOGS", "admin", "Admin Successfully Backedup Logs ", new Timestamp(new Date().getTime()).toString());
+        init();
     }//GEN-LAST:event_clearBtnActionPerformed
 
     private void debugBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_debugBtnActionPerformed
@@ -145,6 +166,30 @@ public class MgmtLogs extends javax.swing.JPanel {
             sqlite.DEBUG_MODE = 1;
     }//GEN-LAST:event_debugBtnActionPerformed
 
+    public void copyFile() {
+    //For Files
+        try(FileWriter fw = new FileWriter("myfile.txt", true);
+            BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter out = new PrintWriter(bw))
+            {
+                ArrayList<Logs> logs = sqlite.getLogs();
+                    for(int nCtr = 0; nCtr < logs.size(); nCtr++){
+                        out.println(logs.get(nCtr).getEvent() + " | " + logs.get(nCtr).getUsername() + " | " + logs.get(nCtr).getDesc() + " | " + logs.get(nCtr).getTimestamp() + " | " );
+                    }
+            } catch (IOException e) {
+                if(sqlite.DEBUG_MODE == 1){
+                    e.printStackTrace(pw);
+                    errorMessage = sw.toString();
+                    sqlite.addLogs("ERROR", "admin", errorMessage, new Timestamp(new Date().getTime()).toString());
+                }
+                else{
+                    errorMessage = "Transfer of Logs to Backup Failed";
+                    sqlite.addLogs("ERROR", "admin", errorMessage, new Timestamp(new Date().getTime()).toString());
+                }     
+            }
+    }
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton clearBtn;

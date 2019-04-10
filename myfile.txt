@@ -1,0 +1,67 @@
+NOTICE | admin | admin has logged in | 2019-04-10 07:33:16.406 | 
+ERROR | admin | User input a string instead of integer | 2019-04-10 07:33:21.304 | 
+NOTICE | admin | admin has logged out | 2019-04-10 07:33:27.039 | 
+NOTICE | client2 | client2 has logged in | 2019-04-10 07:33:34.264 | 
+NOTICE | Firewall | Firewall was succesfully updated in product table | 2019-04-10 07:33:38.768 | 
+NOTICE | Firewall | Firewall was succesfully updated in history table | 2019-04-10 07:33:39.044 | 
+ERROR | client2 | java.lang.NumberFormatException: For input string: "asfadfafsd"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:580)
+	at java.lang.Integer.parseInt(Integer.java:615)
+	at View.MgmtProduct.validateInt(MgmtProduct.java:211)
+	at View.MgmtProduct.purchaseBtnActionPerformed(MgmtProduct.java:261)
+	at View.MgmtProduct.access$000(MgmtProduct.java:26)
+	at View.MgmtProduct$2.actionPerformed(MgmtProduct.java:138)
+	at javax.swing.AbstractButton.fireActionPerformed(AbstractButton.java:2022)
+	at javax.swing.AbstractButton$Handler.actionPerformed(AbstractButton.java:2348)
+	at javax.swing.DefaultButtonModel.fireActionPerformed(DefaultButtonModel.java:402)
+	at javax.swing.DefaultButtonModel.setPressed(DefaultButtonModel.java:259)
+	at javax.swing.plaf.basic.BasicButtonListener.mouseReleased(BasicButtonListener.java:252)
+	at java.awt.Component.processMouseEvent(Component.java:6535)
+	at javax.swing.JComponent.processMouseEvent(JComponent.java:3324)
+	at java.awt.Component.processEvent(Component.java:6300)
+	at java.awt.Container.processEvent(Container.java:2236)
+	at java.awt.Component.dispatchEventImpl(Component.java:4891)
+	at java.awt.Container.dispatchEventImpl(Container.java:2294)
+	at java.awt.Component.dispatchEvent(Component.java:4713)
+	at java.awt.LightweightDispatcher.retargetMouseEvent(Container.java:4888)
+	at java.awt.LightweightDispatcher.processMouseEvent(Container.java:4525)
+	at java.awt.LightweightDispatcher.dispatchEvent(Container.java:4466)
+	at java.awt.Container.dispatchEventImpl(Container.java:2280)
+	at java.awt.Window.dispatchEventImpl(Window.java:2750)
+	at java.awt.Component.dispatchEvent(Component.java:4713)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:758)
+	at java.awt.EventQueue.access$500(EventQueue.java:97)
+	at java.awt.EventQueue$3.run(EventQueue.java:709)
+	at java.awt.EventQueue$3.run(EventQueue.java:703)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.awt.EventQueue$4.run(EventQueue.java:731)
+	at java.awt.EventQueue$4.run(EventQueue.java:729)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:728)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:201)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:116)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:105)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:101)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
+ | 2019-04-10 07:33:44.411 | 
+NOTICE | client2 | client2 has logged out | 2019-04-10 07:33:48.781 | 
+NOTICE | admin | admin has logged in | 2019-04-10 07:33:56.398 | 
+NOTICE | manager | manager has logged in | 2019-04-10 07:36:54.699 | 
+NOTICE | manager | manager has deleted productFirewall | 2019-04-10 07:37:05.361 | 
+NOTICE | manager | manager has logged out | 2019-04-10 07:37:07.028 | 
+NOTICE | admin | admin has logged in | 2019-04-10 07:37:14.192 | 
+NOTICE | admin | admin has logged in | 2019-04-10 07:43:17.504 | 
+NOTICE | admin | client2 has been lock | 2019-04-10 07:43:28.376 | 
+NOTICE | admin | client1 has been deleted by adminclient1 | 2019-04-10 07:43:37.377 | 
+NOTICE | admin | client2 has been unlock | 2019-04-10 07:43:41.278 | 
+NOTICE | admin | manager has been assigned to new role 3 | 2019-04-10 07:43:49.075 | 
+NOTICE | admin | staff has been assigned to new role 4 | 2019-04-10 07:43:52.954 | 
+NOTICE | admin | admin has logged out | 2019-04-10 07:44:18.633 | 
+NOTICE | staff | staff has logged in | 2019-04-10 07:44:24.103 | 
+NOTICE | staff | staff has logged out | 2019-04-10 07:44:28.036 | 
+NOTICE | admin | admin has logged in | 2019-04-10 07:44:34.763 | 

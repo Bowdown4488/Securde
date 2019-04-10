@@ -162,7 +162,6 @@ public class Register extends javax.swing.JPanel {
                                 }else{
                                     message="Wrong captcha";
                                 }
-
                             }    
                             else{
                                 message="Username not available";

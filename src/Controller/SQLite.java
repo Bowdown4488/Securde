@@ -277,6 +277,7 @@ public class SQLite {
             stmt.setBytes(2, hashed.getHash());
             stmt.setBytes(3, hashed.getSalt());
             result = stmt.executeUpdate() > 0;
+            addLogs("NOTICE", "New user",s.deSanitize(username) + " has been created" , new Timestamp(new Date().getTime()).toString());
         } catch (Exception ex) { /* Log: Log exception */ 
             if(DEBUG_MODE == 1){
                 ex.printStackTrace(pw);

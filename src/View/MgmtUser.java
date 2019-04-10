@@ -8,7 +8,9 @@ package View;
 import Controller.SQLite;
 import Controller.Sanitize;
 import Model.User;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JComboBox;
@@ -219,6 +221,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 System.out.println("User:" + selectedUsername);
                 System.out.println("New Role:" + newRole);
                 sqlite.updateRole(selectedUsername, newRole);
+                sqlite.addLogs("NOTICE", "admin", selectedUsername + " has been assigned to new role " + Integer.toString(newRole), new Timestamp(new Date().getTime()).toString());
 //                if(newRole == 1){
 //                    sqlite.lockAccount(selectedUsername,3);
 //                }
@@ -238,6 +241,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 String deleteUser = (String)tableModel.getValueAt(table.getSelectedRow(), 0);
                 System.out.println("User to delete: " + deleteUser);
                 sqlite.removeUser(deleteUser);
+                sqlite.addLogs("NOTICE", "admin", deleteUser + " has been deleted by admin" + (String)tableModel.getValueAt(table.getSelectedRow(), 0), new Timestamp(new Date().getTime()).toString());
             }
             init(role,user);
         }
@@ -258,10 +262,12 @@ public class MgmtUser extends javax.swing.JPanel {
                 if(state.equals("lock")){
                     System.out.println("Locking user: " + user);
                     sqlite.lockAccount(user,3);
+                    sqlite.addLogs("NOTICE", "admin", user + " has been " + state, new Timestamp(new Date().getTime()).toString());
                 }
                 else{
                     System.out.println("Unlocking user: " + user);
                     sqlite.lockAccount(user,0);
+                    sqlite.addLogs("NOTICE", "admin", user + " has been " + state, new Timestamp(new Date().getTime()).toString());
                 }
             }
         }
@@ -269,7 +275,7 @@ public class MgmtUser extends javax.swing.JPanel {
     }//GEN-LAST:event_lockBtnActionPerformed
 
     private void chgpassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chgpassBtnActionPerformed
-        if(table.getSelectedRow() >= 0){
+        if(table.getSelectedRow() >= 0 && role==5){
             JTextField password = new JPasswordField();
             JTextField confpass = new JPasswordField();
             designer(password, "PASSWORD");
@@ -308,6 +314,89 @@ public class MgmtUser extends javax.swing.JPanel {
                         if (isLetter && isDigit && isSpecial) {
                             System.out.println("Valid password");
                             sqlite.updatePassword(user, pass);
+                            sqlite.addLogs("NOTICE", "admin", (String)tableModel.getValueAt(table.getSelectedRow(), 0) + " ,admin has changed this users password" + (String)tableModel.getValueAt(table.getSelectedRow(), 0), new Timestamp(new Date().getTime()).toString());
+                            //Insert Query Here
+                        }
+                        else if (!isLetter && isDigit && isSpecial){
+        //                    message="No Letters Found";
+                            System.out.println("No Letters Found");
+                        }
+                        else if (isLetter && !isDigit && isSpecial){
+        //                    message="No Digit Found";
+                            System.out.println("No Digit Found");
+                        }
+                        else if (isLetter && isDigit && !isSpecial){
+        //                    message="No Special Found";
+                            System.out.println("No Special Found");
+                        }
+                        else if (!isLetter && !isDigit && isSpecial){
+        //                    message="No Letters and Digit Found";
+                            System.out.println("No Letters and Digit Found");
+                        }
+                        else if (!isLetter && isDigit && !isSpecial){
+        //                    message="No Letters and Special Found";
+                            System.out.println("No Letters and Special Found");
+                        }
+                        else if (isLetter && !isDigit && !isSpecial){
+        //                    message="No Digit and Special Found";
+                            System.out.println("No Digit and Special Found");
+                        }
+                        else {
+        //                    message="Password not created";
+                            System.out.println("Password not created");
+                        } 
+                    }
+                    else{
+        //                message="Password Less Than 8 Characters";
+                        System.out.println("Password Less Than 8 Characters");
+                    }
+        }
+        else{
+//            message="Password and Confirm Password Don't Match";
+            System.out.println("Password and Confirm Password Don't Match");
+        }
+                 
+            }
+        }else{
+            JTextField password = new JPasswordField();
+            JTextField confpass = new JPasswordField();
+            designer(password, "PASSWORD");
+            designer(confpass, "CONFIRM PASSWORD");
+            
+            Object[] message = {
+                "Self Enter New Password:", password, confpass
+            };
+
+            int result = JOptionPane.showConfirmDialog(null, message, "CHANGE PASSWORD", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+            
+            if (result == JOptionPane.OK_OPTION) {
+                String users = s.sanitize(user.getUsername());
+                String pass = s.sanitize(password.getText());
+                String conf = s.sanitize(confpass.getText());
+                String userpass = password.getText();
+                String userconfpass = confpass.getText();
+                System.out.println("Password: " + userpass);
+                System.out.println("Confirm Password: " + userconfpass);
+                if(pass.equals(conf)){
+                    if(password.getText().length()>=8){
+                        Pattern letter = Pattern.compile("[a-zA-z]");
+                        Pattern digit = Pattern.compile("[0-9]");
+                        Pattern special = Pattern.compile ("[!@#$%&*()_+=|<>?{}\\[\\]~-]");
+
+                        Matcher hasLetter = letter.matcher(password.getText());
+                        Matcher hasDigit = digit.matcher(password.getText());
+                        Matcher hasSpecial = special.matcher(password.getText());
+
+                        boolean isLetter = hasLetter.find();
+                        boolean isDigit = hasDigit.find();
+                        boolean isSpecial = hasSpecial.find();
+
+                        //If Statements For Logging Purposes
+
+                        if (isLetter && isDigit && isSpecial) {
+                            System.out.println("Valid password");
+                            sqlite.updatePassword(users, pass);
+                            sqlite.addLogs("NOTICE", (String)tableModel.getValueAt(table.getSelectedRow(), 0), (String)tableModel.getValueAt(table.getSelectedRow(), 0) + " on their own changed password" + (String)tableModel.getValueAt(table.getSelectedRow(), 0), new Timestamp(new Date().getTime()).toString());
                             //Insert Query Here
                         }
                         else if (!isLetter && isDigit && isSpecial){

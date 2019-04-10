@@ -36,6 +36,7 @@ public class Sanitize {
         input = input.contains("&lt") ? input.replaceAll("&lt", "<") : input;
         input = input.contains("&gt") ? input.replaceAll("&gt", ">") : input;
         input = input.contains("&semi") ? input.replaceAll("&semi", ";") : input;
+        input = input.contains("&back") ? input.replaceAll("&back", "\\") : input;
         input = input.contains("&amp") ? input.replaceAll("&amp", "&") : input;
         System.out.println("input desanitized = " + input);
         return input;
